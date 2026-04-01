@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle, AlertTriangle, Lightbulb, ChevronRight, BookmarkPlus, Filter } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Lightbulb, ChevronRight, BookmarkPlus } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 import { harmonyErrors } from '@/data/mockData';
 
