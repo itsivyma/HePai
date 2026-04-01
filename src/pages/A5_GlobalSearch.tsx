@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Clock, X } from 'lucide-react';
+import { Search, Clock } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 import { useNavigate } from 'react-router-dom';
 
