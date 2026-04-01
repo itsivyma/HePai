@@ -36,7 +36,7 @@ const B7FeedbackOverview = () => {
         )
       );
 
-  const severeCount = harmonyErrors.filter(e => e.severity === 'severe').length;
+
 
   return (
     <div className="min-h-screen bg-background pb-24">

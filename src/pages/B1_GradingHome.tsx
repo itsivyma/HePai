@@ -1,4 +1,4 @@
-import { Camera, Upload, Lightbulb, Search, AlertCircle } from 'lucide-react';
+import { Camera, Upload, Lightbulb, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { recentWorks } from '@/data/mockData';
 import PageHeader from '@/components/shared/PageHeader';
