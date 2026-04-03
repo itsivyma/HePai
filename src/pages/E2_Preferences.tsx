@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/shared/PageHeader';
 
 const E2Preferences = () => {
-  const [density, setDensity] = useState('標準');
+  
   const [hintLevel, setHintLevel] = useState('中');
   const [notify, setNotify] = useState(true);
 
