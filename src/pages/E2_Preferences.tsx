@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/shared/PageHeader';
 
 const E2Preferences = () => {
-  const [density, setDensity] = useState('標準');
+  
   const [hintLevel, setHintLevel] = useState('中');
   const [notify, setNotify] = useState(true);
 
@@ -10,14 +10,6 @@ const E2Preferences = () => {
     <div className="min-h-screen bg-background pb-24">
       <PageHeader title="偏好設定" showBack />
       <div className="px-4 pt-4 space-y-5">
-        <div>
-          <label className="text-xs font-medium text-muted-foreground mb-2 block">顯示密度</label>
-          <div className="flex gap-2">
-            {['緊湊', '標準', '寬鬆'].map(d => (
-              <button key={d} onClick={() => setDensity(d)} className={`flex-1 py-2 rounded-xl text-sm font-medium ${density === d ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'}`}>{d}</button>
-            ))}
-          </div>
-        </div>
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-2 block">提示程度</label>
           <div className="flex gap-2">
