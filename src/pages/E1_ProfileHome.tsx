@@ -39,9 +39,9 @@ const E1ProfileHome = () => {
       <div className="px-4 pt-4 space-y-5">
         {/* Profile card */}
         <div className="p-4 rounded-2xl bg-card border border-border shadow-card flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-xl font-display font-bold text-primary">陳</div>
+          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-xl font-display font-bold text-primary">馬</div>
           <div>
-            <p className="text-base font-semibold">陳小明</p>
+            <p className="text-base font-semibold">馬筱詩</p>
             <p className="text-xs text-muted-foreground">學生 · music_student@example.com</p>
           </div>
         </div>
