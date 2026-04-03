@@ -1,9 +1,31 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Shield, Download, HelpCircle, ChevronRight } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 
+const SegmentedControl = ({ options, value, onChange }: { options: { label: string; value: string }[]; value: string; onChange: (v: string) => void }) => (
+  <div className="flex gap-1 p-1 rounded-xl bg-secondary/60 backdrop-blur-sm border border-border/50">
+    {options.map(opt => (
+      <button
+        key={opt.value}
+        onClick={() => onChange(opt.value)}
+        className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+          value === opt.value
+            ? 'bg-card shadow-card text-foreground border border-border/40'
+            : 'text-muted-foreground hover:text-foreground'
+        }`}
+      >
+        {opt.label}
+      </button>
+    ))}
+  </div>
+);
+
 const E1ProfileHome = () => {
   const navigate = useNavigate();
+  const [appearance, setAppearance] = useState('light');
+  const [language, setLanguage] = useState('zh');
+
   const menuItems = [
     { icon: Settings, label: '偏好設定', path: '/profile/preferences' },
     { icon: Shield, label: '權限管理', path: '/profile/permissions' },
@@ -28,6 +50,34 @@ const E1ProfileHome = () => {
         <div className="p-3 rounded-xl bg-success/5 border border-success/10 flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-success" />
           <p className="text-xs text-muted-foreground">資料已同步 · 最後更新 5 分鐘前</p>
+        </div>
+
+        {/* Display & Language card */}
+        <div className="p-4 rounded-2xl bg-card border border-border shadow-card space-y-4">
+          <p className="text-sm font-semibold">顯示與語言</p>
+          <div className="space-y-1.5">
+            <label className="text-xs text-muted-foreground">外觀模式</label>
+            <SegmentedControl
+              options={[
+                { label: '淺色模式', value: 'light' },
+                { label: '深色模式', value: 'dark' },
+                { label: '跟隨系統', value: 'system' },
+              ]}
+              value={appearance}
+              onChange={setAppearance}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs text-muted-foreground">語言</label>
+            <SegmentedControl
+              options={[
+                { label: '中文', value: 'zh' },
+                { label: 'English', value: 'en' },
+              ]}
+              value={language}
+              onChange={setLanguage}
+            />
+          </div>
         </div>
 
         {/* Export */}
