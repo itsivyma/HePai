@@ -10,6 +10,14 @@ export const chapters = [
   { id: 'general', name: '基礎樂理綜合', icon: '📚', questionCount: 60, progress: 55 },
 ];
 
+export const examYears = [
+  { year: '114', questionCount: 50, progress: 0, starred: 0 },
+  { year: '113', questionCount: 50, progress: 42, starred: 3 },
+  { year: '112', questionCount: 50, progress: 68, starred: 5 },
+  { year: '111', questionCount: 50, progress: 85, starred: 2 },
+  { year: '110', questionCount: 50, progress: 30, starred: 1 },
+];
+
 export const harmonyErrors = [
   {
     id: 'e1',
@@ -89,9 +97,10 @@ export const harmonyErrors = [
 ];
 
 export const recentWorks = [
-  { id: 'w1', title: '和聲習題 Ch.5 - 練習三', date: '2026-03-30', errorCount: 5, chapter: '功能和聲', thumbnail: '🎼' },
-  { id: 'w2', title: '期中模擬 - 四部和聲', date: '2026-03-28', errorCount: 3, chapter: '聲部進行', thumbnail: '📝' },
+  { id: 'w1', title: '四部和聲作業 Ch.5', date: '2026-03-30', errorCount: 5, chapter: '功能和聲', thumbnail: '🎼' },
+  { id: 'w2', title: '期中模擬－四部和聲', date: '2026-03-28', errorCount: 3, chapter: '聲部進行', thumbnail: '📝' },
   { id: 'w3', title: '終止式練習 #7', date: '2026-03-25', errorCount: 8, chapter: '終止式', thumbnail: '🎵' },
+  { id: 'w4', title: '聲部進行練習', date: '2026-03-22', errorCount: 2, chapter: '聲部進行', thumbnail: '📐' },
 ];
 
 export const mcqQuestions = [

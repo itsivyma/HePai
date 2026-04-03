@@ -21,10 +21,14 @@ const B2Upload = () => {
         
         <div className="text-center">
           <div className="w-64 h-80 border-2 border-dashed border-primary-foreground/30 rounded-2xl flex items-center justify-center mx-auto">
-            <div className="text-center">
+            <div className="text-center px-4">
               <Camera size={40} className="text-primary-foreground/40 mx-auto mb-3" />
-              <p className="text-sm text-primary-foreground/50">將譜面對準此區域</p>
-              <p className="text-xs text-primary-foreground/30 mt-1">確保光線充足、譜面平整</p>
+              <p className="text-sm text-primary-foreground/50">將手寫樂譜對準此區域</p>
+              <p className="text-xs text-primary-foreground/30 mt-1">確保四部合聲譜面完整入鏡</p>
+              <div className="mt-3 space-y-0.5">
+                <p className="text-[10px] text-primary-foreground/25">支援手寫四部和聲作業</p>
+                <p className="text-[10px] text-primary-foreground/25">PDF · JPG · PNG</p>
+              </div>
             </div>
           </div>
         </div>

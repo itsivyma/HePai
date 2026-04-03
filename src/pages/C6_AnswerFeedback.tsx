@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, XCircle, BookOpen, RotateCw } from 'lucide-react';
+import { CheckCircle, XCircle, BookOpen, RotateCw, ChevronRight, Plus } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 import { mcqQuestions } from '@/data/mockData';
 
 const C6AnswerFeedback = () => {
   const navigate = useNavigate();
   const q = mcqQuestions[0];
-  const isCorrect = false; // demo: wrong answer
+  const isCorrect = false;
+  const userAnswer = 'A';
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -26,34 +27,43 @@ const C6AnswerFeedback = () => {
         </div>
 
         {/* Rule ref */}
-        <div className="p-3 rounded-xl bg-accent/5 border border-accent/10">
+        <button onClick={() => navigate(`/grading/error/${q.id}`)} className="w-full p-3 rounded-xl bg-accent/5 border border-accent/10 flex items-center justify-between">
           <p className="text-xs text-muted-foreground">參考規則：{q.ruleRef}</p>
-        </div>
+          <ChevronRight size={14} className="text-muted-foreground" />
+        </button>
 
         {/* Options breakdown */}
-        <div className="space-y-1.5">
-          {q.options.map(o => (
-            <div key={o.label} className={`p-3 rounded-xl border text-sm flex items-center gap-3 ${
-              o.label === q.answer ? 'bg-success/5 border-success/15' : 'bg-card border-border'
-            }`}>
-              <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-medium shrink-0 ${
-                o.label === q.answer ? 'bg-success text-success-foreground' : 'bg-secondary text-muted-foreground'
-              }`}>{o.label}</span>
-              <span>{o.text}</span>
-              {o.label === q.answer && <CheckCircle size={14} className="text-success ml-auto" />}
-            </div>
-          ))}
+        <div>
+          <h3 className="text-xs font-semibold text-muted-foreground mb-1.5">各選項分析</h3>
+          <div className="space-y-1.5">
+            {q.options.map(o => (
+              <div key={o.label} className={`p-3 rounded-xl border text-sm flex items-center gap-3 ${
+                o.label === q.answer ? 'bg-success/5 border-success/15' : o.label === userAnswer ? 'bg-destructive/5 border-destructive/15' : 'bg-card border-border'
+              }`}>
+                <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-medium shrink-0 ${
+                  o.label === q.answer ? 'bg-success text-success-foreground' : o.label === userAnswer ? 'bg-destructive text-destructive-foreground' : 'bg-secondary text-muted-foreground'
+                }`}>{o.label}</span>
+                <span className="flex-1">{o.text}</span>
+                {o.label === q.answer && <CheckCircle size={14} className="text-success shrink-0" />}
+                {o.label === userAnswer && o.label !== q.answer && <XCircle size={14} className="text-destructive shrink-0" />}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* CTAs */}
-        <div className="space-y-2">
+        <div className="space-y-2 pt-1">
           <button onClick={() => navigate('/questions/answer')} className="w-full py-3 bg-primary text-primary-foreground rounded-xl text-sm font-medium shadow-soft flex items-center justify-center gap-2">
-            <RotateCw size={16} /> 同類再來一題
+            <ChevronRight size={16} /> 下一題
           </button>
-          <button onClick={() => navigate(`/grading/error/${q.id}`)} className="w-full py-3 bg-card border border-border text-foreground rounded-xl text-sm font-medium shadow-card flex items-center justify-center gap-2">
-            <BookOpen size={16} /> 查看規則詳情
-          </button>
-          <button className="w-full py-2.5 text-sm text-primary font-medium">加入錯題本</button>
+          <div className="flex gap-2">
+            <button onClick={() => navigate('/questions/answer')} className="flex-1 py-3 bg-card border border-border text-foreground rounded-xl text-sm font-medium shadow-card flex items-center justify-center gap-2">
+              <RotateCw size={14} /> 同類再來一題
+            </button>
+            <button className="flex-1 py-3 bg-card border border-border text-foreground rounded-xl text-sm font-medium shadow-card flex items-center justify-center gap-2">
+              <Plus size={14} /> 加入錯題本
+            </button>
+          </div>
         </div>
       </div>
     </div>
