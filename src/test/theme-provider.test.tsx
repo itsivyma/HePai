@@ -48,8 +48,6 @@ describe("ThemeProvider integration in App.tsx", () => {
     // If early returns exist, they must NOT be direct returns from App
     // They should be in a nested function (renderScreen, etc.)
     if (topLevelEarlyReturns) {
-      // Check that these are inside a nested function, not at App's top level
-      const earlyReturnCode = topLevelEarlyReturns[1];
       const nestedFnMatch = appSource.match(
         /const \w+\s*=\s*\(\)\s*(?::\s*\w+\s*)?=>\s*\{[\s\S]*?if \(screen ===/
       );
