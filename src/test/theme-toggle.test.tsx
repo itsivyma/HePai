@@ -74,7 +74,7 @@ describe("E2_Preferences theme toggle", () => {
       "utf-8"
     );
     expect(source).toContain("resolvedTheme");
-    // Should use theme ?? resolvedTheme or similar fallback pattern
-    expect(source).toMatch(/theme\s*\?\?\s*resolvedTheme|resolvedTheme.*fallback|currentTheme/);
+    // Must use nullish coalescing to fall back to resolvedTheme
+    expect(source).toMatch(/theme\s*\?\?\s*resolvedTheme/);
   });
 });
