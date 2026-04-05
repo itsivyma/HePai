@@ -150,7 +150,7 @@ const B7FeedbackOverview = () => {
               onClick={() => toggleFilter(f)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all shrink-0 ${
                 activeFilters.includes(f)
-                  ? 'glass bg-primary/10 text-primary border border-primary/20'
+                  ? 'liquid-glass-subtle bg-primary/10 text-primary border-primary/20'
                   : 'bg-secondary text-muted-foreground'
               }`}
             >

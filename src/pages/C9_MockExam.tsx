@@ -25,7 +25,7 @@ const C9MockExam = () => {
   const q = mcqQuestions[current % mcqQuestions.length];
   return (
     <div className="min-h-screen bg-background pb-24">
-      <div className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border/50 px-4 py-2">
+      <div className="sticky top-0 z-40 liquid-glass border-b border-border/50 px-4 py-2">
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">{current + 1} / 20</span>
           <span className="text-xs font-medium text-accent flex items-center gap-1"><Clock size={12} /> 28:45</span>
