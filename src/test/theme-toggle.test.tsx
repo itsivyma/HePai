@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { readFileSync } from "fs";
+import { resolve } from "path";
 
 // Mock next-themes
 const mockSetTheme = vi.fn();
@@ -67,11 +69,8 @@ describe("E2_Preferences theme toggle", () => {
   });
 
   it("uses resolvedTheme fallback to avoid flash of unstyled content", () => {
-    // Verify the source code uses resolvedTheme as fallback
-    const fs = require("fs");
-    const path = require("path");
-    const source = fs.readFileSync(
-      path.resolve(__dirname, "../pages/E2_Preferences.tsx"),
+    const source = readFileSync(
+      resolve(__dirname, "../pages/E2_Preferences.tsx"),
       "utf-8"
     );
     expect(source).toContain("resolvedTheme");
