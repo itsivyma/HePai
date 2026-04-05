@@ -14,7 +14,7 @@ const C7WrongBook = () => {
       <div className="px-4 pt-3 space-y-3">
         <div className="flex gap-1.5 overflow-x-auto hide-scrollbar -mx-4 px-4">
           {filters.map((f,i) => (
-            <button key={f} className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 ${i===0?'bg-primary/10 text-primary glass':'bg-secondary text-muted-foreground'}`}>{f}</button>
+            <button key={f} className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shrink-0 ${i===0?'bg-primary/10 text-primary liquid-glass':'bg-secondary text-muted-foreground'}`}>{f}</button>
           ))}
         </div>
         <div className="space-y-2">

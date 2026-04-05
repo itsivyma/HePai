@@ -32,7 +32,7 @@ const A5GlobalSearch = () => {
               key={t}
               onClick={() => setActiveTab(i)}
               className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
-                activeTab === i ? 'glass bg-primary/10 text-primary border-primary/20' : 'bg-secondary text-muted-foreground'
+                activeTab === i ? 'liquid-glass bg-primary/10 text-primary border-primary/20' : 'bg-secondary text-muted-foreground'
               }`}
             >
               {t}

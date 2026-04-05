@@ -127,7 +127,7 @@ const B2Upload = () => {
       )}
 
       {/* Controls */}
-      <div className="glass-strong safe-bottom px-6 py-5">
+      <div className="liquid-glass-strong safe-bottom px-6 py-5">
         <div className="flex items-center justify-around">
           <button onClick={() => navigate('/grading/process')} className="flex flex-col items-center gap-1.5">
             <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center">
