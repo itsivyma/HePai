@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import BottomTabBar from '@/components/layout/BottomTabBar';
@@ -61,58 +62,66 @@ const App = () => {
     setScreen('main');
   };
 
-  if (screen === 'splash') return <A0Splash onComplete={() => setScreen('onboarding')} />;
-  if (screen === 'onboarding') return <A1Onboarding onComplete={() => setScreen('login')} />;
-  if (screen === 'login') return <A2Login onComplete={() => setScreen('permissions')} />;
-  if (screen === 'permissions') return <A3Permissions onComplete={goMain} />;
+  const renderScreen = () => {
+    if (screen === 'splash') return <A0Splash onComplete={() => setScreen('onboarding')} />;
+    if (screen === 'onboarding') return <A1Onboarding onComplete={() => setScreen('login')} />;
+    if (screen === 'login') return <A2Login onComplete={() => setScreen('permissions')} />;
+    if (screen === 'permissions') return <A3Permissions onComplete={goMain} />;
+
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <BrowserRouter>
+            <div className="max-w-lg mx-auto min-h-screen bg-background relative">
+              <Routes>
+                <Route path="/" element={<B1GradingHome />} />
+                <Route path="/grading" element={<B1GradingHome />} />
+                <Route path="/grading/upload" element={<B2Upload />} />
+                <Route path="/grading/process" element={<B3ImageProcess />} />
+                <Route path="/grading/recognition" element={<B4RecognitionResult />} />
+                <Route path="/grading/correct" element={<B5ManualCorrect />} />
+                <Route path="/grading/analysis" element={<B6AnalysisProgress />} />
+                <Route path="/grading/feedback" element={<B7FeedbackOverview />} />
+                <Route path="/grading/error/:id" element={<B8ErrorDetail />} />
+                <Route path="/grading/rewrite" element={<B9RewriteSuggestion />} />
+                <Route path="/grading/save" element={<B10SaveWork />} />
+                <Route path="/grading/library" element={<B11WorkLibrary />} />
+                <Route path="/grading/work/:id" element={<B12WorkDetail />} />
+                <Route path="/questions" element={<C1QuestionHome />} />
+                <Route path="/questions/list" element={<C2QuestionList />} />
+                <Route path="/questions/settings" element={<C3PracticeSettings />} />
+                <Route path="/questions/practice" element={<C4PracticeProgress />} />
+                <Route path="/questions/answer" element={<C5AnswerInterface />} />
+                <Route path="/questions/feedback" element={<C6AnswerFeedback />} />
+                <Route path="/questions/wrong-book" element={<C7WrongBook />} />
+                <Route path="/questions/weakness" element={<C8WeaknessTraining />} />
+                <Route path="/questions/mock-exam" element={<C9MockExam />} />
+                <Route path="/questions/history" element={<C10PracticeHistory />} />
+                <Route path="/reports" element={<D1ReportHome />} />
+                <Route path="/reports/errors" element={<D2ErrorStats />} />
+                <Route path="/reports/trends" element={<D3TrendAnalysis />} />
+                <Route path="/reports/weekly" element={<D4WeeklyReport />} />
+                <Route path="/reports/goals" element={<D5GoalsReminders />} />
+                <Route path="/profile" element={<E1ProfileHome />} />
+                <Route path="/profile/preferences" element={<E2Preferences />} />
+                <Route path="/profile/permissions" element={<E3PermissionManage />} />
+                <Route path="/profile/account" element={<E4AccountSecurity />} />
+                <Route path="/profile/help" element={<E5HelpSupport />} />
+                <Route path="/search" element={<A5GlobalSearch />} />
+              </Routes>
+              <BottomTabBar />
+            </div>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
-          <div className="max-w-lg mx-auto min-h-screen bg-background relative">
-            <Routes>
-              <Route path="/" element={<B1GradingHome />} />
-              <Route path="/grading" element={<B1GradingHome />} />
-              <Route path="/grading/upload" element={<B2Upload />} />
-              <Route path="/grading/process" element={<B3ImageProcess />} />
-              <Route path="/grading/recognition" element={<B4RecognitionResult />} />
-              <Route path="/grading/correct" element={<B5ManualCorrect />} />
-              <Route path="/grading/analysis" element={<B6AnalysisProgress />} />
-              <Route path="/grading/feedback" element={<B7FeedbackOverview />} />
-              <Route path="/grading/error/:id" element={<B8ErrorDetail />} />
-              <Route path="/grading/rewrite" element={<B9RewriteSuggestion />} />
-              <Route path="/grading/save" element={<B10SaveWork />} />
-              <Route path="/grading/library" element={<B11WorkLibrary />} />
-              <Route path="/grading/work/:id" element={<B12WorkDetail />} />
-              <Route path="/questions" element={<C1QuestionHome />} />
-              <Route path="/questions/list" element={<C2QuestionList />} />
-              <Route path="/questions/settings" element={<C3PracticeSettings />} />
-              <Route path="/questions/practice" element={<C4PracticeProgress />} />
-              <Route path="/questions/answer" element={<C5AnswerInterface />} />
-              <Route path="/questions/feedback" element={<C6AnswerFeedback />} />
-              <Route path="/questions/wrong-book" element={<C7WrongBook />} />
-              <Route path="/questions/weakness" element={<C8WeaknessTraining />} />
-              <Route path="/questions/mock-exam" element={<C9MockExam />} />
-              <Route path="/questions/history" element={<C10PracticeHistory />} />
-              <Route path="/reports" element={<D1ReportHome />} />
-              <Route path="/reports/errors" element={<D2ErrorStats />} />
-              <Route path="/reports/trends" element={<D3TrendAnalysis />} />
-              <Route path="/reports/weekly" element={<D4WeeklyReport />} />
-              <Route path="/reports/goals" element={<D5GoalsReminders />} />
-              <Route path="/profile" element={<E1ProfileHome />} />
-              <Route path="/profile/preferences" element={<E2Preferences />} />
-              <Route path="/profile/permissions" element={<E3PermissionManage />} />
-              <Route path="/profile/account" element={<E4AccountSecurity />} />
-              <Route path="/profile/help" element={<E5HelpSupport />} />
-              <Route path="/search" element={<A5GlobalSearch />} />
-            </Routes>
-            <BottomTabBar />
-          </div>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      {renderScreen()}
+    </ThemeProvider>
   );
 };
 
