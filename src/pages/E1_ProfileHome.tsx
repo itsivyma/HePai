@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from 'next-themes';
 import { Settings, Shield, Download, HelpCircle, ChevronRight } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 
@@ -23,7 +24,8 @@ const SegmentedControl = ({ options, value, onChange }: { options: { label: stri
 
 const E1ProfileHome = () => {
   const navigate = useNavigate();
-  const [appearance, setAppearance] = useState('light');
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const appearance = theme ?? resolvedTheme ?? 'system';
   const [language, setLanguage] = useState('zh');
 
   const menuItems = [
@@ -64,7 +66,7 @@ const E1ProfileHome = () => {
                 { label: '跟隨系統', value: 'system' },
               ]}
               value={appearance}
-              onChange={setAppearance}
+              onChange={setTheme}
             />
           </div>
           <div className="space-y-1.5">
