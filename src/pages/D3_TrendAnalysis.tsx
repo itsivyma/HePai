@@ -24,11 +24,11 @@ const D3TrendAnalysis = () => {
           <h3 className="text-sm font-semibold mb-3">正確率趨勢</h3>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 18% 90%)" />
-              <XAxis dataKey="day" tick={{ fontSize: 10 }} stroke="hsl(215 12% 50%)" />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} stroke="hsl(215 12% 50%)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="day" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
               <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="hsl(192 72% 42%)" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
