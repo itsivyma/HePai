@@ -28,4 +28,11 @@ describe("PageHeader", () => {
     expect(header.className).not.toContain("backdrop-blur-md");
     expect(header.className).not.toContain("bg-background/90");
   });
+
+  it("resets liquid-glass border and only applies bottom divider", () => {
+    const { container } = renderHeader();
+    const header = container.firstElementChild as HTMLElement;
+    expect(header.className).toContain("border-0");
+    expect(header.className).toContain("border-b");
+  });
 });

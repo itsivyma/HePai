@@ -12,7 +12,7 @@ interface PageHeaderProps {
 const PageHeader = ({ title, showBack = false, showSearch, onSearch, right }: PageHeaderProps) => {
   const navigate = useNavigate();
   return (
-    <div className="sticky top-0 z-40 liquid-glass border-b border-border/50">
+    <div className="sticky top-0 z-40 liquid-glass border-0 border-b border-border/50">
       <div className="flex items-center justify-between h-12 px-4">
         <div className="flex items-center gap-2 min-w-0">
           {showBack && (
