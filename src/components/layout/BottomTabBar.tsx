@@ -14,7 +14,7 @@ const BottomTabBar = () => {
   const currentTab = tabs.find(t => location.pathname.startsWith(t.path))?.path || '/grading';
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 glass-strong safe-bottom">
+    <div className="fixed bottom-0 left-0 right-0 z-50 liquid-glass-strong safe-bottom">
       <div className="max-w-lg mx-auto flex items-center justify-around h-16">
         {tabs.map(tab => {
           const active = currentTab === tab.path;
