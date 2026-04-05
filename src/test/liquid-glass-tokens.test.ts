@@ -108,10 +108,9 @@ describe("Liquid Glass utility classes", () => {
     expect(cssContent).toMatch(/\.liquid-glass-shine::after/);
   });
 
-  it("keeps legacy glass classes for backward compatibility during migration", () => {
-    expect(cssContent).toMatch(/\.glass\s*\{/);
-    expect(cssContent).toMatch(/\.glass-strong\s*\{/);
-    expect(cssContent).toMatch(/\.glass-subtle\s*\{/);
+  it("legacy glass classes are removed after full migration", () => {
+    const legacyGlass = cssContent.match(/^\s*\.glass\s*\{/m);
+    expect(legacyGlass).toBeNull();
   });
 });
 

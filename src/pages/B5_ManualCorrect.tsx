@@ -120,7 +120,7 @@ const B5ManualCorrect = () => {
 
       {/* Toolbar */}
       <div className="px-4 pb-2">
-        <div className="flex items-center justify-around py-2.5 rounded-2xl glass border border-border shadow-soft">
+        <div className="flex items-center justify-around py-2.5 rounded-2xl liquid-glass">
           {tools.map((t, i) => (
             <button key={i} onClick={() => setActiveTool(i)} className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-all ${
               activeTool === i ? 'bg-primary/10 text-primary' : 'text-muted-foreground'

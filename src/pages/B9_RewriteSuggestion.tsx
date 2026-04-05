@@ -11,7 +11,7 @@ const B9RewriteSuggestion = () => {
       <div className="px-4 pt-4 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold">{showRevised ? '修正後' : '原始版本'}</h2>
-          <button onClick={() => setShowRevised(!showRevised)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-xs font-medium text-primary">
+          <button onClick={() => setShowRevised(!showRevised)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass text-xs font-medium text-primary">
             <ArrowLeftRight size={12} /> 切換對照
           </button>
         </div>
