@@ -35,7 +35,7 @@ const B2Upload = () => {
   }
 
   return (
-    <div className="min-h-screen bg-foreground flex flex-col">
+    <div className="min-h-screen bg-zinc-950 flex flex-col">
       {/* Camera preview */}
       <div className="relative flex-1 flex items-center justify-center">
         <div className="absolute top-0 left-0 right-0 z-10">

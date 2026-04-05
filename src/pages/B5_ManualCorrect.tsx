@@ -29,7 +29,7 @@ const B5ManualCorrect = () => {
 
       {/* First-time tutorial overlay */}
       {showTutorial && (
-        <div className="fixed inset-0 z-50 bg-foreground/60 flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
           <div className="w-full max-w-sm bg-card rounded-2xl border border-border shadow-elevated p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-display font-semibold">校正工具使用說明</h3>

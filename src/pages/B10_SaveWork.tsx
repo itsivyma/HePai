@@ -26,7 +26,7 @@ const B10SaveWork = () => {
 
       {/* Leave confirmation overlay */}
       {showLeaveConfirm && (
-        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center px-6">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-6">
           <div className="w-full max-w-sm bg-card rounded-2xl border border-border shadow-elevated p-5 text-center">
             <AlertTriangle size={28} className="text-warning mx-auto mb-3" />
             <h3 className="text-base font-display font-semibold mb-1">尚未儲存</h3>
