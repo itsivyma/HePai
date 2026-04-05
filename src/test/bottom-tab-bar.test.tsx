@@ -22,13 +22,12 @@ describe("BottomTabBar", () => {
   it("uses liquid-glass-strong class", () => {
     const { container } = renderTabBar();
     const wrapper = container.firstElementChild as HTMLElement;
-    expect(wrapper.className).toContain("liquid-glass-strong");
+    expect(wrapper).toHaveClass("liquid-glass-strong");
   });
 
-  it("no longer uses legacy glass-strong class (standalone)", () => {
+  it("no longer uses legacy glass-strong class", () => {
     const { container } = renderTabBar();
     const wrapper = container.firstElementChild as HTMLElement;
-    const classes = wrapper.className.split(/\s+/);
-    expect(classes).not.toContain("glass-strong");
+    expect(wrapper).not.toHaveClass("glass-strong");
   });
 });

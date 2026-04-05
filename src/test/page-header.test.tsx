@@ -19,20 +19,20 @@ describe("PageHeader", () => {
   it("uses liquid-glass class for frosted header", () => {
     const { container } = renderHeader();
     const header = container.firstElementChild as HTMLElement;
-    expect(header.className).toContain("liquid-glass");
+    expect(header).toHaveClass("liquid-glass");
   });
 
   it("no longer uses inline backdrop-blur-md", () => {
     const { container } = renderHeader();
     const header = container.firstElementChild as HTMLElement;
-    expect(header.className).not.toContain("backdrop-blur-md");
-    expect(header.className).not.toContain("bg-background/90");
+    expect(header).not.toHaveClass("backdrop-blur-md");
+    expect(header).not.toHaveClass("bg-background/90");
   });
 
   it("resets liquid-glass border and only applies bottom divider", () => {
     const { container } = renderHeader();
     const header = container.firstElementChild as HTMLElement;
-    expect(header.className).toContain("border-0");
-    expect(header.className).toContain("border-b");
+    expect(header).toHaveClass("border-0");
+    expect(header).toHaveClass("border-b");
   });
 });
