@@ -12,7 +12,9 @@ describe("B4RecognitionResult", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("連續五度 #1");
+    expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("平行五度");
+    expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 1 拍至第 2 拍");
+    expect(screen.getByRole("button", { name: "平行五度，第二小節，第 1 拍至第 2 拍" })).toBeInTheDocument();
 
     fireEvent.click(
       within(screen.getByTestId("issue-navigator")).getByRole("button", { name: /連續八度/i })
@@ -34,17 +36,22 @@ describe("B4RecognitionResult", () => {
     const mobileCard = screen.getByTestId("selected-issue-mobile-card");
     const issueNavigator = screen.getByTestId("issue-navigator");
 
+    expect(screen.getByRole("region", { name: "錯誤導覽" })).toBeInTheDocument();
     expect(overlay).toHaveClass("hidden", "sm:block");
-    expect(mobileCard).toHaveClass("sm:hidden");
-    expect(overlay).toHaveTextContent("連續五度 #1");
-    expect(mobileCard).toHaveTextContent("連續五度 #1");
-    expect(within(issueNavigator).getByRole("button", { name: /連續五度 #1/i })).toHaveAttribute("aria-pressed", "true");
+    expect(mobileCard).toHaveClass("sm:hidden", "rounded-[2rem]", "border", "bg-card");
+    expect(screen.queryByText("問題導覽")).not.toBeInTheDocument();
+    expect(screen.queryByText("點選任一錯誤，更新譜面高亮與下方詳細說明。")).not.toBeInTheDocument();
+    expect(overlay).toHaveTextContent("平行五度");
+    expect(mobileCard).toHaveTextContent("平行五度");
+    expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 1 拍至第 2 拍");
+    expect(screen.getByRole("button", { name: "平行五度，第二小節，第 1 拍至第 2 拍" })).toBeInTheDocument();
 
-    fireEvent.click(within(issueNavigator).getByRole("button", { name: /連續五度 #2/i }));
+    fireEvent.click(
+      within(issueNavigator).getByRole("button", { name: /平行五度.*第二小節，第 2 拍至第 3 拍/i })
+    );
 
-    expect(overlay).toHaveTextContent("連續五度 #2");
-    expect(mobileCard).toHaveTextContent("連續五度 #2");
-    expect(within(issueNavigator).getByRole("button", { name: /連續五度 #1/i })).toHaveAttribute("aria-pressed", "false");
-    expect(within(issueNavigator).getByRole("button", { name: /連續五度 #2/i })).toHaveAttribute("aria-pressed", "true");
+    expect(overlay).toHaveTextContent("平行五度");
+    expect(mobileCard).toHaveTextContent("平行五度");
+    expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 2 拍至第 3 拍");
   });
 });

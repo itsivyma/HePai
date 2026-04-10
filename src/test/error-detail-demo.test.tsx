@@ -15,7 +15,7 @@ describe("B8ErrorDetail", () => {
     );
 
     expect(screen.getByText("連續八度")).toBeInTheDocument();
-    expect(screen.getByText("第 5 到 6 小節")).toBeInTheDocument();
+    expect(screen.getByText("第二小節，第 3 拍至第 4 拍")).toBeInTheDocument();
     expect(screen.getByText(/避免外聲部形成連續純八度/)).toBeInTheDocument();
   });
 });

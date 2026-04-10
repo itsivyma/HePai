@@ -13,6 +13,7 @@ describe("grading demo helpers", () => {
 
     expect(cards[0].id).toBe("parallel-octave");
     expect(cards[0].title).toBe("連續八度");
+    expect(cards[0].measureLabel).toBe("第二小節，第 3 拍至第 4 拍");
     expect(cards).toHaveLength(4);
   });
 

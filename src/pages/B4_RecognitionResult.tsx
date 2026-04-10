@@ -143,13 +143,14 @@ const B4RecognitionResult = () => {
                 const color = issueColors[issue.id] ?? defaultIssueColor;
                 const centerX = issue.box.x + issue.box.width / 2;
                 const markerY = issue.box.y - 18;
+                const issueLabel = `${issue.title}，${issue.measureLabel}`;
 
                 return (
                   <g
                     key={issue.id}
                     role="button"
                     tabIndex={0}
-                    aria-label={issue.title}
+                    aria-label={issueLabel}
                     onClick={() => setSelectedIssueId(issue.id)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter' || event.key === ' ') {
@@ -216,18 +217,13 @@ const B4RecognitionResult = () => {
               <SelectedIssueBadge issue={selectedIssue} />
             </div>
           </div>
-          <div data-testid="selected-issue-mobile-card" className="mt-3 rounded-2xl border border-border/70 bg-background px-4 py-3 sm:hidden">
-            <SelectedIssueBadge issue={selectedIssue} />
-          </div>
         </section>
 
-        <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
-          <div className="px-1 pb-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">問題導覽</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              點選任一錯誤，更新譜面高亮與下方詳細說明。
-            </p>
-          </div>
+        <section data-testid="selected-issue-mobile-card" className="rounded-[2rem] border border-border bg-card p-4 shadow-card sm:hidden">
+          <SelectedIssueBadge issue={selectedIssue} />
+        </section>
+
+        <section aria-label="錯誤導覽" className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
           <div data-testid="issue-navigator" className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
             {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
               const isActive = issue.id === selectedIssueId;
@@ -276,7 +272,7 @@ const B4RecognitionResult = () => {
             <div>
               <p className="text-sm font-medium text-amber-900">建議修正順序</p>
               <p className="mt-1 text-xs leading-relaxed text-amber-800/80">
-                先處理三個嚴重的平行問題，再回頭收斂 over 8 的聲部間距。這樣重寫時比較不會一改 spacing 就又引發新的平行。
+                先處理三個嚴重的平行問題，再回頭收斂超過八度的聲部間距。這樣重寫時比較不會一改 spacing 就又引發新的平行。
               </p>
             </div>
           </div>

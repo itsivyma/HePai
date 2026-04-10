@@ -12,6 +12,11 @@ const BottomTabBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentTab = tabs.find(t => location.pathname.startsWith(t.path))?.path || '/grading';
+  const hiddenRoutes = ['/grading/upload'];
+
+  if (hiddenRoutes.includes(location.pathname)) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 liquid-glass-strong safe-bottom">
