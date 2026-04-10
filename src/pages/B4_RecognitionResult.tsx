@@ -222,7 +222,7 @@ const B4RecognitionResult = () => {
           <SelectedIssueBadge issue={selectedIssue} />
         </section>
 
-        <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
+        <section aria-label="錯誤導覽" className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
           <div data-testid="issue-navigator" className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
             {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
               const isActive = issue.id === selectedIssueId;

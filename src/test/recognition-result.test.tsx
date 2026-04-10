@@ -34,6 +34,7 @@ describe("B4RecognitionResult", () => {
     const mobileCard = screen.getByTestId("selected-issue-mobile-card");
     const issueNavigator = screen.getByTestId("issue-navigator");
 
+    expect(screen.getByRole("region", { name: "錯誤導覽" })).toBeInTheDocument();
     expect(overlay).toHaveClass("hidden", "sm:block");
     expect(mobileCard).toHaveClass("sm:hidden", "rounded-[2rem]", "border", "bg-card");
     expect(screen.queryByText("問題導覽")).not.toBeInTheDocument();
