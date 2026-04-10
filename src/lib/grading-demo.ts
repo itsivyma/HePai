@@ -128,6 +128,20 @@ export const upsertDemoRecentWork = (works: DemoRecentWork[]) => {
 
 const canUseStorage = () => typeof window !== "undefined" && Boolean(window.localStorage);
 
+const isDemoRecentWork = (value: unknown): value is DemoRecentWork => {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.title === "string" &&
+    typeof candidate.date === "string" &&
+    typeof candidate.errorCount === "number" &&
+    typeof candidate.chapter === "string" &&
+    typeof candidate.thumbnail === "string"
+  );
+};
+
 export const saveDemoRecentWork = () => {
   if (!canUseStorage()) return;
 
@@ -145,7 +159,10 @@ export const readDemoRecentWorks = (): DemoRecentWork[] => {
   if (!raw) return [];
 
   try {
-    return JSON.parse(raw) as DemoRecentWork[];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.filter(isDemoRecentWork);
   } catch {
     return [];
   }

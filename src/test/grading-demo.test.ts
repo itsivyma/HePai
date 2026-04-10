@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   DEMO_RECOGNITION_ISSUES,
   buildRecognitionCards,
+  readDemoRecentWorks,
   upsertDemoRecentWork,
 } from "@/lib/grading-demo";
 
@@ -21,5 +22,16 @@ describe("grading demo helpers", () => {
 
     expect(firstInsert[0].id).toBe("demo-score-capture");
     expect(secondInsert.filter((work) => work.id === "demo-score-capture")).toHaveLength(1);
+  });
+
+  it("falls back to an empty list when stored JSON is not a valid demo work array", () => {
+    window.localStorage.setItem("hepai_demo_recent_works", JSON.stringify({ foo: "bar" }));
+    expect(readDemoRecentWorks()).toEqual([]);
+
+    window.localStorage.setItem(
+      "hepai_demo_recent_works",
+      JSON.stringify([{ id: 123, title: "bad shape" }])
+    );
+    expect(readDemoRecentWorks()).toEqual([]);
   });
 });

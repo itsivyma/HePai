@@ -120,9 +120,9 @@ const B4RecognitionResult = () => {
             <svg
               viewBox={`0 0 ${SCORE_WIDTH} ${SCORE_HEIGHT}`}
               className="absolute inset-0 h-full w-full"
-              role="img"
-              aria-label="已辨識的四部和聲樂譜與錯誤框選"
+              aria-labelledby="recognition-score-title"
             >
+              <title id="recognition-score-title">已辨識的四部和聲樂譜與錯誤框選</title>
               <image href={DEMO_CAPTURE_IMAGE} x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} preserveAspectRatio="none" />
               <rect x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} fill="url(#scoreShade)" />
               <defs>
