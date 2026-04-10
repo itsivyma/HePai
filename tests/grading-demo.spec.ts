@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("secondary upload actions remain available and recent work appears only after recognition", async ({ page }) => {
-  await page.goto("http://127.0.0.1:8080/grading/upload");
+  await page.goto("/grading/upload");
   await page.evaluate(() => {
     window.localStorage.removeItem("hepai_demo_recent_works");
   });
@@ -15,18 +15,18 @@ test("secondary upload actions remain available and recent work appears only aft
   await page.getByRole("button", { name: "從相簿選擇樂譜" }).click();
   await expect(page).toHaveURL(/\/grading\/process$/);
 
-  await page.goto("http://127.0.0.1:8080/grading");
+  await page.goto("/grading");
   await expect(page.getByText("拍攝示範｜四部和聲批改")).toHaveCount(0);
 
-  await page.goto("http://127.0.0.1:8080/grading/upload");
+  await page.goto("/grading/upload");
   await page.getByRole("button", { name: "上傳檔案或 PDF" }).click();
   await expect(page.getByText("選擇頁面")).toBeVisible();
   await page.getByRole("button", { name: "第 1 頁" }).click();
   await expect(page).toHaveURL(/\/grading\/process$/);
 
-  await page.waitForURL(/\/grading\/recognition$/, { timeout: 7000 });
+  await page.waitForURL(/\/grading\/recognition$/);
   await expect(page.getByText("已完成譜面辨識與錯誤定位")).toBeVisible();
 
-  await page.goto("http://127.0.0.1:8080/grading");
+  await page.goto("/grading");
   await expect(page.getByText("拍攝示範｜四部和聲批改")).toBeVisible();
 });

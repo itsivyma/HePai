@@ -22,6 +22,8 @@ const issueColors: Record<string, { stroke: string; fill: string }> = {
   'over-8': { stroke: '#7c3aed', fill: 'rgba(124,58,237,0.14)' },
 };
 
+const defaultIssueColor = { stroke: '#0f172a', fill: 'rgba(15,23,42,0.10)' };
+
 const B4RecognitionResult = () => {
   const navigate = useNavigate();
   const [selectedIssueId, setSelectedIssueId] = useState(DEMO_RECOGNITION_ISSUES[0].id);
@@ -132,7 +134,7 @@ const B4RecognitionResult = () => {
 
               {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
                 const isActive = issue.id === selectedIssueId;
-                const color = issueColors[issue.id];
+                const color = issueColors[issue.id] ?? defaultIssueColor;
                 const centerX = issue.box.x + issue.box.width / 2;
                 const markerY = issue.box.y - 18;
 
