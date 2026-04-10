@@ -20,4 +20,20 @@ describe("B4RecognitionResult", () => {
     expect(primaryPanel).toHaveTextContent("連續八度");
     expect(primaryPanel).toHaveTextContent("避免外聲部形成連續純八度");
   });
+
+  it("keeps the selected issue summary available outside the score on mobile", () => {
+    render(
+      <MemoryRouter>
+        <B4RecognitionResult />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId("selected-issue-overlay")).toHaveTextContent("連續五度 #1");
+    expect(screen.getByTestId("selected-issue-mobile-card")).toHaveTextContent("連續五度 #1");
+
+    fireEvent.click(screen.getAllByRole("button", { name: /連續五度 #2/i })[0]);
+
+    expect(screen.getByTestId("selected-issue-overlay")).toHaveTextContent("連續五度 #2");
+    expect(screen.getByTestId("selected-issue-mobile-card")).toHaveTextContent("連續五度 #2");
+  });
 });
