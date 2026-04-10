@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import BottomTabBar from "@/components/layout/BottomTabBar";
 
-const renderTabBar = () =>
+const renderTabBar = (initialEntry = "/grading") =>
   render(
-    <MemoryRouter initialEntries={["/grading"]}>
+    <MemoryRouter initialEntries={[initialEntry]}>
       <BottomTabBar />
     </MemoryRouter>
   );
@@ -29,5 +29,10 @@ describe("BottomTabBar", () => {
     const { container } = renderTabBar();
     const wrapper = container.firstElementChild as HTMLElement;
     expect(wrapper).not.toHaveClass("glass-strong");
+  });
+
+  it("does not render on the capture route", () => {
+    const { container } = renderTabBar("/grading/upload");
+    expect(container.firstChild).toBeNull();
   });
 });
