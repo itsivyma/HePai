@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import PageHeader from '@/components/shared/PageHeader';
@@ -23,6 +23,16 @@ const issueColors: Record<string, { stroke: string; fill: string }> = {
 };
 
 const defaultIssueColor = { stroke: '#0f172a', fill: 'rgba(15,23,42,0.10)' };
+
+const SelectedIssueBadge = ({ issue }: { issue: RecognitionIssue }) => (
+  <div className="flex items-center justify-between gap-3">
+    <div>
+      <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">目前選取</p>
+      <p className="mt-1 text-sm font-medium">{issue.title}</p>
+    </div>
+    <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{issue.voices}</div>
+  </div>
+);
 
 const B4RecognitionResult = () => {
   const navigate = useNavigate();
@@ -99,7 +109,7 @@ const B4RecognitionResult = () => {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2">
             <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
               <p className="text-[11px] text-muted-foreground">已框選錯誤</p>
               <p className="mt-1 text-lg font-semibold">{DEMO_RECOGNITION_ISSUES.length}</p>
@@ -107,10 +117,6 @@ const B4RecognitionResult = () => {
             <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
               <p className="text-[11px] text-muted-foreground">嚴重違規</p>
               <p className="mt-1 text-lg font-semibold text-destructive">{severeCount}</p>
-            </div>
-            <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
-              <p className="text-[11px] text-muted-foreground">目前焦點</p>
-              <p className="mt-1 text-sm font-semibold">{selectedIssue.title}</p>
             </div>
           </div>
         </section>
@@ -203,20 +209,26 @@ const B4RecognitionResult = () => {
               })}
             </svg>
 
-            <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/45 bg-background/82 px-4 py-3 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">目前選取</p>
-                  <p className="mt-1 text-sm font-medium">{selectedIssue.title}</p>
-                </div>
-                <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{selectedIssue.voices}</div>
-              </div>
+            <div
+              data-testid="selected-issue-overlay"
+              className="absolute inset-x-3 bottom-3 hidden rounded-2xl border border-white/45 bg-background/82 px-4 py-3 backdrop-blur-md sm:block"
+            >
+              <SelectedIssueBadge issue={selectedIssue} />
             </div>
+          </div>
+          <div data-testid="selected-issue-mobile-card" className="mt-3 rounded-2xl border border-border/70 bg-background px-4 py-3 sm:hidden">
+            <SelectedIssueBadge issue={selectedIssue} />
           </div>
         </section>
 
         <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
-          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+          <div className="px-1 pb-3">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">問題導覽</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              點選任一錯誤，更新譜面高亮與下方詳細說明。
+            </p>
+          </div>
+          <div data-testid="issue-navigator" className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
             {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
               const isActive = issue.id === selectedIssueId;
 
@@ -225,8 +237,9 @@ const B4RecognitionResult = () => {
                   key={issue.id}
                   type="button"
                   onClick={() => setSelectedIssueId(issue.id)}
+                  aria-pressed={isActive}
                   className={cn(
-                    'min-w-[13.5rem] rounded-[1.25rem] border px-4 py-3 text-left transition-all',
+                    'w-full rounded-[1.25rem] border px-4 py-3 text-left transition-all sm:min-w-[13.5rem] sm:w-auto',
                     isActive ? 'border-primary/30 bg-primary/5 shadow-soft' : 'border-border bg-background'
                   )}
                 >
@@ -236,11 +249,13 @@ const B4RecognitionResult = () => {
                         <span className={cn('rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em]', issue.accent)}>
                           {index + 1}
                         </span>
-                        <p className="text-sm font-medium">{issue.title}</p>
+                        <p className="text-sm font-medium leading-snug">{issue.title}</p>
                       </div>
                       <p className="mt-1 text-xs text-muted-foreground">{issue.measureLabel}</p>
                     </div>
-                    <div className={cn('mt-0.5 h-2.5 w-2.5 rounded-full', isActive ? 'bg-primary' : 'bg-muted-foreground/25')} />
+                    <div className="mt-0.5 shrink-0">
+                      <div className={cn('h-2.5 w-2.5 rounded-full', isActive ? 'bg-primary' : 'bg-muted-foreground/25')} />
+                    </div>
                   </div>
                 </button>
               );
@@ -267,19 +282,7 @@ const B4RecognitionResult = () => {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />
-            <div>
-              <p className="text-sm font-medium text-emerald-900">已加入最近批改</p>
-              <p className="mt-1 text-xs leading-relaxed text-emerald-800/80">
-                這份示範拍攝會出現在「批改」首頁與作品庫，方便你之後回來重看辨識結果。
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <button
             onClick={() => navigate('/grading/work/demo-score-capture')}
             className="h-11 rounded-xl border border-border bg-card text-sm font-medium shadow-card"
