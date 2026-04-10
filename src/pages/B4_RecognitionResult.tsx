@@ -1,113 +1,294 @@
-import { AlertTriangle, CheckCircle, Edit3, Play, Camera, Info } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import PageHeader from '@/components/shared/PageHeader';
 
-const recognitionItems = [
-  { label: '譜號', value: '高音譜號 + 低音譜號', ok: true },
-  { label: '調號', value: 'G 大調（1♯）', ok: true },
-  { label: '拍號', value: '4/4', ok: true },
-  { label: '小節數', value: '8 小節', ok: true },
-  { label: '聲部', value: 'S · A · T · B（四部）', ok: true },
-  { label: '小節線', value: '第 6 小節可能缺漏', ok: false },
-];
+import PageHeader from '@/components/shared/PageHeader';
+import {
+  buildRecognitionCards,
+  DEMO_CAPTURE_IMAGE,
+  DEMO_RECOGNITION_ISSUES,
+  saveDemoRecentWork,
+  type RecognitionIssue,
+} from '@/lib/grading-demo';
+import { cn } from '@/lib/utils';
+
+const SCORE_WIDTH = 2048;
+const SCORE_HEIGHT = 840;
+
+const issueColors: Record<string, { stroke: string; fill: string }> = {
+  'parallel-fifth-1': { stroke: '#dc2626', fill: 'rgba(220,38,38,0.14)' },
+  'parallel-fifth-2': { stroke: '#ea580c', fill: 'rgba(234,88,12,0.14)' },
+  'parallel-octave': { stroke: '#2563eb', fill: 'rgba(37,99,235,0.14)' },
+  'over-8': { stroke: '#7c3aed', fill: 'rgba(124,58,237,0.14)' },
+};
 
 const B4RecognitionResult = () => {
   const navigate = useNavigate();
+  const [selectedIssueId, setSelectedIssueId] = useState(DEMO_RECOGNITION_ISSUES[0].id);
+
+  useEffect(() => {
+    saveDemoRecentWork();
+  }, []);
+
+  const orderedIssues = buildRecognitionCards(DEMO_RECOGNITION_ISSUES, selectedIssueId);
+  const selectedIssue = orderedIssues[0];
+  const severeCount = DEMO_RECOGNITION_ISSUES.filter((issue) => issue.severity === 'severe').length;
+
+  const renderIssueSummary = (issue: RecognitionIssue) => (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className={cn('rounded-full border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]', issue.accent)}>
+              {issue.shortLabel}
+            </span>
+            <span className="text-[11px] text-muted-foreground">{issue.measureLabel}</span>
+          </div>
+          <h3 className="mt-3 text-lg font-display font-semibold">{issue.title}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{issue.voices}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setSelectedIssueId(issue.id)}
+          className="rounded-full border border-border bg-background px-3 py-1 text-[11px] text-muted-foreground"
+        >
+          定位
+        </button>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        <section className="rounded-2xl bg-background px-4 py-3">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">錯誤摘要</p>
+          <p className="mt-2 text-sm font-medium leading-relaxed">{issue.summary}</p>
+        </section>
+        <section className="rounded-2xl bg-background px-4 py-3">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">為什麼會被抓到</p>
+          <p className="mt-2 text-sm leading-relaxed text-foreground">{issue.why}</p>
+        </section>
+        <section className="rounded-2xl bg-background px-4 py-3">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">下一步怎麼改</p>
+          <p className="mt-2 text-sm leading-relaxed text-foreground">{issue.fix}</p>
+        </section>
+      </div>
+
+      <div className="mt-3 rounded-2xl border border-dashed border-border bg-background px-4 py-3">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">快速檢查點</p>
+        <p className="mt-2 text-sm leading-relaxed">{issue.checkpoint}</p>
+      </div>
+    </>
+  );
 
   return (
     <div className="min-h-screen bg-background pb-24">
       <PageHeader title="辨識結果" showBack />
       <div className="px-4 pt-4 space-y-4">
-        {/* Score preview with overlays */}
-        <div className="w-full aspect-[3/2] bg-card rounded-2xl border border-border shadow-card p-4 relative overflow-hidden">
-          {/* Staff lines */}
-          <div className="absolute inset-x-6 top-1/4 space-y-1">
-            {[0,1,2,3,4].map(i => <div key={i} className="h-[1px] bg-muted-foreground/15" />)}
-          </div>
-          <div className="absolute inset-x-6 bottom-1/4 space-y-1">
-            {[0,1,2,3,4].map(i => <div key={i} className="h-[1px] bg-muted-foreground/15" />)}
-          </div>
-
-          {/* Overlay markers */}
-          <div className="absolute top-5 left-6 px-1.5 py-0.5 bg-primary/15 text-primary text-[10px] rounded font-medium">𝄞 G大調</div>
-          <div className="absolute top-5 right-6 px-1.5 py-0.5 bg-primary/15 text-primary text-[10px] rounded font-medium">4/4</div>
-
-          <div className="absolute top-[38%] left-6 space-y-1">
-            {['S', 'A'].map(v => (
-              <div key={v} className="px-1 py-0.5 bg-accent/15 text-accent text-[9px] rounded font-medium">{v}</div>
-            ))}
-          </div>
-          <div className="absolute bottom-[22%] left-6 space-y-1">
-            {['T', 'B'].map(v => (
-              <div key={v} className="px-1 py-0.5 bg-accent/15 text-accent text-[9px] rounded font-medium">{v}</div>
-            ))}
+        <section className="rounded-[2rem] border border-border bg-[linear-gradient(180deg,rgba(34,211,238,0.06),rgba(255,255,255,1)_34%)] p-4 shadow-elevated">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-primary/62">Recognition Review</p>
+              <h2 className="mt-1 text-lg font-display font-semibold">已完成譜面辨識與錯誤定位</h2>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                先看譜面中的當前錯誤，再從下方切換到其他問題。畫面一次只強調一個錯誤，避免多框重疊干擾判讀。
+              </p>
+            </div>
+            <div className="rounded-2xl border border-primary/12 bg-primary/8 px-3 py-2 text-right">
+              <p className="text-[11px] text-primary/70">辨識信心度</p>
+              <p className="mt-1 text-lg font-semibold text-primary">96%</p>
+            </div>
           </div>
 
-          {/* Barline markers */}
-          {[0.2, 0.35, 0.5, 0.65, 0.8].map((pos, i) => (
-            <div key={i} className="absolute top-[20%] bottom-[15%] w-[1px] bg-muted-foreground/20" style={{ left: `${pos * 100}%` }} />
-          ))}
-
-          {/* Missing barline marker */}
-          <div className="absolute top-[20%] bottom-[15%] w-[2px] bg-warning/40 border border-dashed border-warning/30" style={{ left: '72%' }} />
-          <div className="absolute px-1 py-0.5 bg-warning/15 text-warning text-[8px] rounded" style={{ left: '68%', top: '12%' }}>?</div>
-        </div>
-
-        {/* Confidence */}
-        <div className="flex items-center gap-3 p-3.5 rounded-xl bg-success/8 border border-success/15">
-          <CheckCircle size={18} className="text-success shrink-0" />
-          <div className="flex-1">
-            <p className="text-sm font-medium">辨識信心度：92%</p>
-            <p className="text-xs text-muted-foreground">大部分譜面元素已成功辨識</p>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
+              <p className="text-[11px] text-muted-foreground">已框選錯誤</p>
+              <p className="mt-1 text-lg font-semibold">{DEMO_RECOGNITION_ISSUES.length}</p>
+            </div>
+            <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
+              <p className="text-[11px] text-muted-foreground">嚴重違規</p>
+              <p className="mt-1 text-lg font-semibold text-destructive">{severeCount}</p>
+            </div>
+            <div className="rounded-2xl bg-card px-3 py-3 shadow-card">
+              <p className="text-[11px] text-muted-foreground">目前焦點</p>
+              <p className="mt-1 text-sm font-semibold">{selectedIssue.title}</p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Recognition detail list */}
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-card">
-          <h3 className="text-xs font-semibold text-muted-foreground mb-3">辨識摘要</h3>
-          <div className="space-y-2.5">
-            {recognitionItems.map(item => (
-              <div key={item.label} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {item.ok
-                    ? <CheckCircle size={13} className="text-success" />
-                    : <AlertTriangle size={13} className="text-warning" />
-                  }
-                  <span className="text-xs text-muted-foreground">{item.label}</span>
+        <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
+          <div className="relative aspect-[2048/840] overflow-hidden rounded-[1.5rem] border border-border/60 bg-muted/30">
+            <svg
+              viewBox={`0 0 ${SCORE_WIDTH} ${SCORE_HEIGHT}`}
+              className="absolute inset-0 h-full w-full"
+              role="img"
+              aria-label="已辨識的四部和聲樂譜與錯誤框選"
+            >
+              <image href={DEMO_CAPTURE_IMAGE} x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} preserveAspectRatio="none" />
+              <rect x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} fill="url(#scoreShade)" />
+              <defs>
+                <linearGradient id="scoreShade" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(7,12,20,0.01)" />
+                  <stop offset="100%" stopColor="rgba(7,12,20,0.10)" />
+                </linearGradient>
+              </defs>
+
+              {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
+                const isActive = issue.id === selectedIssueId;
+                const color = issueColors[issue.id];
+                const centerX = issue.box.x + issue.box.width / 2;
+                const markerY = issue.box.y - 18;
+
+                return (
+                  <g
+                    key={issue.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={issue.title}
+                    onClick={() => setSelectedIssueId(issue.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setSelectedIssueId(issue.id);
+                      }
+                    }}
+                    className="cursor-pointer"
+                  >
+                    {isActive ? (
+                      <>
+                        <rect
+                          x={issue.box.x}
+                          y={issue.box.y}
+                          width={issue.box.width}
+                          height={issue.box.height}
+                          rx="18"
+                          fill={color.fill}
+                          stroke={color.stroke}
+                          strokeWidth="5"
+                        />
+                        <rect
+                          x={issue.box.x - 2}
+                          y={issue.box.y - 2}
+                          width={issue.box.width + 4}
+                          height={issue.box.height + 4}
+                          rx="20"
+                          fill="none"
+                          stroke="rgba(255,255,255,0.86)"
+                          strokeWidth="2"
+                        />
+                        <g transform={`translate(${issue.box.x + 8}, ${issue.box.y - 40})`}>
+                          <rect
+                            width={Math.max(118, issue.title.length * 16)}
+                            height="28"
+                            rx="14"
+                            fill="rgba(255,255,255,0.96)"
+                            stroke={color.stroke}
+                            strokeWidth="1.5"
+                          />
+                          <text x="12" y="19" fontSize="14" fontWeight="700" fill={color.stroke}>
+                            {issue.title}
+                          </text>
+                        </g>
+                      </>
+                    ) : (
+                      <>
+                        <line x1={centerX} y1={markerY + 14} x2={centerX} y2={issue.box.y} stroke={color.stroke} strokeWidth="2" opacity="0.68" />
+                        <circle cx={centerX} cy={markerY} r="16" fill="rgba(255,255,255,0.95)" stroke={color.stroke} strokeWidth="2" />
+                        <text x={centerX} y={markerY + 4.5} textAnchor="middle" fontSize="12" fontWeight="700" fill={color.stroke}>
+                          {index + 1}
+                        </text>
+                      </>
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
+
+            <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/45 bg-background/82 px-4 py-3 backdrop-blur-md">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">目前選取</p>
+                  <p className="mt-1 text-sm font-medium">{selectedIssue.title}</p>
                 </div>
-                <span className={`text-xs font-medium ${item.ok ? 'text-foreground' : 'text-warning'}`}>{item.value}</span>
+                <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{selectedIssue.voices}</div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Warning */}
-        <div className="flex items-start gap-3 p-3.5 rounded-xl bg-warning/8 border border-warning/15">
-          <AlertTriangle size={16} className="text-warning mt-0.5 shrink-0" />
-          <div>
-            <p className="text-sm font-medium">建議進入校正</p>
-            <p className="text-xs text-muted-foreground mt-0.5">第 6 小節小節線可能未正確辨識，校正後可提高分析準確度</p>
+        <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
+          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+            {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
+              const isActive = issue.id === selectedIssueId;
+
+              return (
+                <button
+                  key={issue.id}
+                  type="button"
+                  onClick={() => setSelectedIssueId(issue.id)}
+                  className={cn(
+                    'min-w-[13.5rem] rounded-[1.25rem] border px-4 py-3 text-left transition-all',
+                    isActive ? 'border-primary/30 bg-primary/5 shadow-soft' : 'border-border bg-background'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className={cn('rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em]', issue.accent)}>
+                          {index + 1}
+                        </span>
+                        <p className="text-sm font-medium">{issue.title}</p>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">{issue.measureLabel}</p>
+                    </div>
+                    <div className={cn('mt-0.5 h-2.5 w-2.5 rounded-full', isActive ? 'bg-primary' : 'bg-muted-foreground/25')} />
+                  </div>
+                </button>
+              );
+            })}
           </div>
-        </div>
+        </section>
 
-        {/* Hint */}
-        <div className="flex items-start gap-2 px-1">
-          <Info size={12} className="text-muted-foreground mt-0.5 shrink-0" />
-          <p className="text-[11px] text-muted-foreground leading-relaxed">系統已辨識你的手寫譜面，你可以直接進行分析，或先校正辨識結果以確保準確度。</p>
-        </div>
-
-        {/* Actions */}
-        <div className="space-y-2">
-          <div className="flex gap-3">
-            <button onClick={() => navigate('/grading/correct')} className="flex-1 h-11 bg-card border border-border text-foreground rounded-xl text-sm font-medium flex items-center justify-center gap-2 shadow-card">
-              <Edit3 size={16} /> 進入校正
-            </button>
-            <button onClick={() => navigate('/grading/analysis')} className="flex-1 h-11 bg-primary text-primary-foreground rounded-xl text-sm font-medium flex items-center justify-center gap-2 shadow-soft">
-              <Play size={16} /> 直接分析
-            </button>
+        <section data-testid="selected-issue-panel" className="rounded-[2rem] border border-border bg-card p-4 shadow-card">
+          <div className="border-b border-border/70 pb-3">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-primary/68">Issue Detail</p>
           </div>
-          <button onClick={() => navigate('/grading/upload')} className="w-full py-2.5 text-sm text-muted-foreground flex items-center justify-center gap-1.5">
-            <Camera size={14} /> 重新拍攝 / 重新上傳
+          <div className="pt-3">{renderIssueSummary(selectedIssue)}</div>
+        </section>
+
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <div className="flex items-start gap-3">
+            <AlertTriangle size={16} className="mt-0.5 shrink-0 text-amber-500" />
+            <div>
+              <p className="text-sm font-medium text-amber-900">建議修正順序</p>
+              <p className="mt-1 text-xs leading-relaxed text-amber-800/80">
+                先處理三個嚴重的平行問題，再回頭收斂 over 8 的聲部間距。這樣重寫時比較不會一改 spacing 就又引發新的平行。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+          <div className="flex items-start gap-3">
+            <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />
+            <div>
+              <p className="text-sm font-medium text-emerald-900">已加入最近批改</p>
+              <p className="mt-1 text-xs leading-relaxed text-emerald-800/80">
+                這份示範拍攝會出現在「批改」首頁與作品庫，方便你之後回來重看辨識結果。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => navigate('/grading/work/demo-score-capture')}
+            className="h-11 rounded-xl border border-border bg-card text-sm font-medium shadow-card"
+          >
+            前往作品詳情
+          </button>
+          <button
+            onClick={() => navigate('/grading/analysis')}
+            className="h-11 rounded-xl bg-primary text-primary-foreground text-sm font-medium shadow-soft"
+          >
+            繼續完整分析
           </button>
         </div>
       </div>

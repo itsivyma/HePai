@@ -1,7 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Share2, RefreshCw, AlertCircle, ChevronRight, Edit3, Music, AlertTriangle, Lightbulb } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
-import { recentWorks, harmonyErrors } from '@/data/mockData';
+import { harmonyErrors } from '@/data/mockData';
+import {
+  DEMO_CAPTURE_IMAGE,
+  DEMO_RECOGNITION_ISSUES,
+  DEMO_WORK_ID,
+  getMergedRecentWorks,
+} from '@/lib/grading-demo';
 
 type Severity = 'severe' | 'warning' | 'suggestion';
 const severityConfig: Record<Severity, { color: string; bg: string; icon: typeof AlertCircle }> = {
@@ -12,7 +18,10 @@ const severityConfig: Record<Severity, { color: string; bg: string; icon: typeof
 
 const B12WorkDetail = () => {
   const navigate = useNavigate();
-  const work = recentWorks[0];
+  const { id } = useParams();
+  const works = getMergedRecentWorks();
+  const work = works.find((item) => item.id === id) ?? works[0];
+  const issueList = work.id === DEMO_WORK_ID ? DEMO_RECOGNITION_ISSUES : harmonyErrors.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -38,17 +47,25 @@ const B12WorkDetail = () => {
 
         {/* Score preview */}
         <div className="w-full aspect-[5/3] bg-card rounded-2xl border border-border shadow-card relative overflow-hidden">
-          <div className="absolute inset-x-4 top-1/4 bottom-1/4 flex flex-col justify-center gap-2">
-            {[0,1].map(sys => (
-              <div key={sys} className="space-y-[3px]">
-                {[0,1,2,3,4].map(i => <div key={i} className="h-[1px] bg-muted-foreground/12" />)}
+          {work.id === DEMO_WORK_ID ? (
+            <>
+              <img src={DEMO_CAPTURE_IMAGE} alt="批改作品預覽" className="absolute inset-0 h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/24 via-transparent to-background/8" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-x-4 top-1/4 bottom-1/4 flex flex-col justify-center gap-2">
+                {[0,1].map(sys => (
+                  <div key={sys} className="space-y-[3px]">
+                    {[0,1,2,3,4].map(i => <div key={i} className="h-[1px] bg-muted-foreground/12" />)}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          {/* Barlines */}
-          {[0.15, 0.3, 0.45, 0.6, 0.75, 0.9].map((pos, i) => (
-            <div key={i} className="absolute top-[20%] bottom-[20%] w-[1px] bg-muted-foreground/15" style={{ left: `${pos * 100}%` }} />
-          ))}
+              {[0.15, 0.3, 0.45, 0.6, 0.75, 0.9].map((pos, i) => (
+                <div key={i} className="absolute top-[20%] bottom-[20%] w-[1px] bg-muted-foreground/15" style={{ left: `${pos * 100}%` }} />
+              ))}
+            </>
+          )}
         </div>
 
         {/* Analysis summary */}
@@ -66,7 +83,7 @@ const B12WorkDetail = () => {
         <div>
           <h3 className="text-sm font-semibold mb-2">錯誤紀錄</h3>
           <div className="space-y-2">
-            {harmonyErrors.slice(0, 4).map(e => {
+            {issueList.map(e => {
               const s = severityConfig[e.severity as Severity];
               const Icon = s.icon;
               return (
@@ -77,7 +94,9 @@ const B12WorkDetail = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">{e.title}</p>
-                    <p className="text-xs text-muted-foreground">第 {e.measure} 小節 · {e.category}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {'measure' in e ? `第 ${e.measure} 小節 · ${e.category}` : `${e.measureLabel} · ${e.voices}`}
+                    </p>
                   </div>
                   <ChevronRight size={16} className="text-muted-foreground shrink-0" />
                 </button>
