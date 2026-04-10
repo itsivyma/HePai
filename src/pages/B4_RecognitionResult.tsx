@@ -143,13 +143,14 @@ const B4RecognitionResult = () => {
                 const color = issueColors[issue.id] ?? defaultIssueColor;
                 const centerX = issue.box.x + issue.box.width / 2;
                 const markerY = issue.box.y - 18;
+                const issueLabel = `${issue.title}，${issue.measureLabel}`;
 
                 return (
                   <g
                     key={issue.id}
                     role="button"
                     tabIndex={0}
-                    aria-label={issue.title}
+                    aria-label={issueLabel}
                     onClick={() => setSelectedIssueId(issue.id)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter' || event.key === ' ') {
@@ -271,7 +272,7 @@ const B4RecognitionResult = () => {
             <div>
               <p className="text-sm font-medium text-amber-900">建議修正順序</p>
               <p className="mt-1 text-xs leading-relaxed text-amber-800/80">
-                先處理三個嚴重的平行問題，再回頭收斂 over 8 的聲部間距。這樣重寫時比較不會一改 spacing 就又引發新的平行。
+                先處理三個嚴重的平行問題，再回頭收斂超過八度的聲部間距。這樣重寫時比較不會一改 spacing 就又引發新的平行。
               </p>
             </div>
           </div>

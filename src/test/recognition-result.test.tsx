@@ -14,6 +14,7 @@ describe("B4RecognitionResult", () => {
 
     expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("平行五度");
     expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 1 拍至第 2 拍");
+    expect(screen.getByRole("button", { name: "平行五度，第二小節，第 1 拍至第 2 拍" })).toBeInTheDocument();
 
     fireEvent.click(
       within(screen.getByTestId("issue-navigator")).getByRole("button", { name: /連續八度/i })
@@ -43,8 +44,11 @@ describe("B4RecognitionResult", () => {
     expect(overlay).toHaveTextContent("平行五度");
     expect(mobileCard).toHaveTextContent("平行五度");
     expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 1 拍至第 2 拍");
+    expect(screen.getByRole("button", { name: "平行五度，第二小節，第 1 拍至第 2 拍" })).toBeInTheDocument();
 
-    fireEvent.click(within(issueNavigator).getByText("第二小節，第 2 拍至第 3 拍"));
+    fireEvent.click(
+      within(issueNavigator).getByRole("button", { name: /平行五度.*第二小節，第 2 拍至第 3 拍/i })
+    );
 
     expect(overlay).toHaveTextContent("平行五度");
     expect(mobileCard).toHaveTextContent("平行五度");
