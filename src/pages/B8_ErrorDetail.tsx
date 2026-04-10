@@ -1,15 +1,92 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Bookmark, BookOpen, CheckCircle, XCircle, ArrowRight, ChevronRight, Plus } from 'lucide-react';
 import PageHeader from '@/components/shared/PageHeader';
 import { harmonyErrors } from '@/data/mockData';
 import { useState } from 'react';
+import { getDemoRecognitionIssue } from '@/lib/grading-demo';
 
 const B8ErrorDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isDemoSource = searchParams.get('source') === 'demo';
+  const demoError = isDemoSource ? getDemoRecognitionIssue(id) : undefined;
   const error = harmonyErrors.find(e => e.id === id) || harmonyErrors[0];
   const [bookmarked, setBookmarked] = useState(false);
   const [addedToWrong, setAddedToWrong] = useState(false);
+
+  if (demoError) {
+    const severityStyles = {
+      severe: { label: '嚴重', tone: 'text-destructive', pill: 'bg-destructive/8 border-destructive/15' },
+      warning: { label: '警告', tone: 'text-warning', pill: 'bg-warning/8 border-warning/15' },
+    } as const;
+    const style = severityStyles[demoError.severity];
+
+    return (
+      <div className="min-h-screen bg-background pb-24">
+        <PageHeader
+          title="錯誤詳情"
+          showBack
+          right={
+            <button
+              onClick={() => setBookmarked(!bookmarked)}
+              className={`transition-colors ${bookmarked ? 'text-primary' : 'text-muted-foreground'}`}
+            >
+              <Bookmark size={18} fill={bookmarked ? 'currentColor' : 'none'} />
+            </button>
+          }
+        />
+
+        <div className="px-4 pt-4 space-y-4">
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+            <div className="flex items-center gap-2">
+              <span className={`rounded-md border px-2 py-0.5 text-xs font-medium ${style.pill} ${style.tone}`}>
+                {style.label}
+              </span>
+              <span className="text-xs text-muted-foreground">{demoError.measureLabel}</span>
+            </div>
+            <h2 className="mt-2 text-lg font-display font-semibold">{demoError.title}</h2>
+            <p className="mt-1 text-xs text-muted-foreground">{demoError.voices}</p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-4 shadow-card">
+            <p className="text-[10px] font-medium text-muted-foreground">錯誤摘要</p>
+            <p className="mt-2 text-sm leading-relaxed">{demoError.summary}</p>
+          </div>
+
+          <div className="rounded-2xl border border-destructive/10 bg-destructive/5 p-4">
+            <h3 className="text-xs font-semibold text-destructive">為什麼會被判定</h3>
+            <p className="mt-2 text-sm leading-relaxed">{demoError.why}</p>
+          </div>
+
+          <div className="rounded-2xl border border-success/10 bg-success/5 p-4">
+            <h3 className="text-xs font-semibold text-success">修正方向</h3>
+            <p className="mt-2 text-sm leading-relaxed">{demoError.fix}</p>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-secondary/35 p-4">
+            <h3 className="text-xs font-semibold text-muted-foreground">快速檢查點</h3>
+            <p className="mt-2 text-sm leading-relaxed">{demoError.checkpoint}</p>
+          </div>
+
+          <div className="space-y-2 pt-1">
+            <button
+              onClick={() => navigate('/grading/recognition')}
+              className="w-full rounded-xl bg-primary py-3 text-sm font-medium text-primary-foreground shadow-soft"
+            >
+              回到辨識結果
+            </button>
+            <button
+              onClick={() => navigate(`/grading/work/demo-score-capture`)}
+              className="w-full rounded-xl border border-border bg-card py-3 text-sm font-medium text-foreground shadow-card"
+            >
+              回到作品詳情
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const severityConfig = {
     severe: { label: '嚴重', color: 'text-destructive', bg: 'bg-destructive/8', borderColor: 'border-destructive/15' },

@@ -1,10 +1,11 @@
 import { Camera, Upload, Lightbulb, AlertCircle, Music } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { recentWorks } from '@/data/mockData';
 import PageHeader from '@/components/shared/PageHeader';
+import { getMergedRecentWorks } from '@/lib/grading-demo';
 
 const B1GradingHome = () => {
   const navigate = useNavigate();
+  const recentWorks = getMergedRecentWorks();
 
   return (
     <div className="min-h-screen bg-background pb-24">

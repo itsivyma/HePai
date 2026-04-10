@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Search, AlertCircle, Filter, Music } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '@/components/shared/PageHeader';
-import { recentWorks, chapters } from '@/data/mockData';
+import { chapters } from '@/data/mockData';
+import { getMergedRecentWorks } from '@/lib/grading-demo';
 
 const chapterFilters = ['全部', ...chapters.slice(0, 6).map(c => c.name)];
 
@@ -10,6 +11,7 @@ const B11WorkLibrary = () => {
   const navigate = useNavigate();
   const [activeChapter, setActiveChapter] = useState('全部');
   const [showFilters, setShowFilters] = useState(false);
+  const recentWorks = getMergedRecentWorks();
 
   return (
     <div className="min-h-screen bg-background pb-24">
