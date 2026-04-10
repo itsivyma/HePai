@@ -35,7 +35,9 @@ describe("B4RecognitionResult", () => {
     const issueNavigator = screen.getByTestId("issue-navigator");
 
     expect(overlay).toHaveClass("hidden", "sm:block");
-    expect(mobileCard).toHaveClass("sm:hidden");
+    expect(mobileCard).toHaveClass("sm:hidden", "rounded-[2rem]", "border", "bg-card");
+    expect(screen.queryByText("問題導覽")).not.toBeInTheDocument();
+    expect(screen.queryByText("點選任一錯誤，更新譜面高亮與下方詳細說明。")).not.toBeInTheDocument();
     expect(overlay).toHaveTextContent("連續五度 #1");
     expect(mobileCard).toHaveTextContent("連續五度 #1");
     expect(within(issueNavigator).getByRole("button", { name: /連續五度 #1/i })).toHaveAttribute("aria-pressed", "true");

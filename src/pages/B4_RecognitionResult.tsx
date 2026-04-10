@@ -216,18 +216,13 @@ const B4RecognitionResult = () => {
               <SelectedIssueBadge issue={selectedIssue} />
             </div>
           </div>
-          <div data-testid="selected-issue-mobile-card" className="mt-3 rounded-2xl border border-border/70 bg-background px-4 py-3 sm:hidden">
-            <SelectedIssueBadge issue={selectedIssue} />
-          </div>
+        </section>
+
+        <section data-testid="selected-issue-mobile-card" className="rounded-[2rem] border border-border bg-card p-4 shadow-card sm:hidden">
+          <SelectedIssueBadge issue={selectedIssue} />
         </section>
 
         <section className="rounded-[2rem] border border-border bg-card p-3 shadow-card">
-          <div className="px-1 pb-3">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">問題導覽</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              點選任一錯誤，更新譜面高亮與下方詳細說明。
-            </p>
-          </div>
           <div data-testid="issue-navigator" className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
             {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
               const isActive = issue.id === selectedIssueId;
