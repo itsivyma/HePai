@@ -228,7 +228,7 @@ const B4RecognitionResult = () => {
               點選任一錯誤，更新譜面高亮與下方詳細說明。
             </p>
           </div>
-          <div className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
+          <div data-testid="issue-navigator" className="grid gap-2 sm:flex sm:overflow-x-auto sm:hide-scrollbar">
             {DEMO_RECOGNITION_ISSUES.map((issue, index) => {
               const isActive = issue.id === selectedIssueId;
 
@@ -237,6 +237,7 @@ const B4RecognitionResult = () => {
                   key={issue.id}
                   type="button"
                   onClick={() => setSelectedIssueId(issue.id)}
+                  aria-pressed={isActive}
                   className={cn(
                     'w-full rounded-[1.25rem] border px-4 py-3 text-left transition-all sm:min-w-[13.5rem] sm:w-auto',
                     isActive ? 'border-primary/30 bg-primary/5 shadow-soft' : 'border-border bg-background'
