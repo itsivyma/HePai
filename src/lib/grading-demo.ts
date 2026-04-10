@@ -117,6 +117,10 @@ export const buildRecognitionCards = (
   return selected ? [selected, ...rest] : issues;
 };
 
+export const getDemoRecognitionIssue = (id?: string) => {
+  return DEMO_RECOGNITION_ISSUES.find((issue) => issue.id === id);
+};
+
 export const upsertDemoRecentWork = (works: DemoRecentWork[]) => {
   const others = works.filter((work) => work.id !== DEMO_WORK_ID);
   return [demoRecentWork, ...others];

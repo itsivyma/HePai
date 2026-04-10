@@ -87,7 +87,11 @@ const B12WorkDetail = () => {
               const s = severityConfig[e.severity as Severity];
               const Icon = s.icon;
               return (
-                <button key={e.id} onClick={() => navigate(`/grading/error/${e.id}`)}
+                <button
+                  key={e.id}
+                  onClick={() =>
+                    navigate(work.id === DEMO_WORK_ID ? `/grading/error/${e.id}?source=demo` : `/grading/error/${e.id}`)
+                  }
                   className="w-full flex items-center gap-3 p-3 rounded-xl bg-card border border-border shadow-card text-left active:scale-[0.98] transition-transform">
                   <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>
                     <Icon size={14} className={s.color} />

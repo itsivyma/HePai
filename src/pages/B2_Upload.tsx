@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Camera, FileUp, Grid3X3, HelpCircle, Image, X, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,17 +38,29 @@ const B2Upload = () => {
   const [showTips, setShowTips] = useState(false);
   const [showPdfPages, setShowPdfPages] = useState(false);
   const [flash, setFlash] = useState(false);
+  const captureTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timers = [
       window.setTimeout(() => setPhase('aligning'), 1100),
       window.setTimeout(() => setPhase('locked'), 2800),
-      window.setTimeout(() => setFlash(true), 3650),
-      window.setTimeout(() => navigate('/grading/process'), 4250),
     ];
 
-    return () => timers.forEach((timer) => window.clearTimeout(timer));
-  }, [navigate]);
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+      if (captureTimerRef.current !== null) {
+        window.clearTimeout(captureTimerRef.current);
+      }
+    };
+  }, []);
+
+  const startProcessing = () => {
+    if (captureTimerRef.current !== null) {
+      window.clearTimeout(captureTimerRef.current);
+    }
+    setFlash(true);
+    captureTimerRef.current = window.setTimeout(() => navigate('/grading/process'), 520);
+  };
 
   const currentPhase = phaseConfig[phase];
 
@@ -176,7 +188,7 @@ const B2Upload = () => {
                       <p className="mt-1 text-[11px] leading-relaxed text-white/56">
                         {phase === 'searching' && '先把上方譜表放進框內，再讓頁面邊緣保持水平。'}
                         {phase === 'aligning' && '系統正在對齊下方譜表與紙面邊界，保持手機穩定即可。'}
-                        {phase === 'locked' && '已完成雙譜表定位，正在切換到辨識流程。'}
+                        {phase === 'locked' && '已完成雙譜表定位，可以直接拍攝，或改由相簿與檔案匯入。'}
                       </p>
                     </div>
                     <div className="pt-0.5">
@@ -223,7 +235,7 @@ const B2Upload = () => {
         <div className="relative z-10 liquid-glass-strong safe-bottom px-6 py-5">
           <div className="flex items-center justify-around">
             <button
-              onClick={() => navigate('/grading/process')}
+              onClick={startProcessing}
               className="flex flex-col items-center gap-1.5 opacity-85"
               aria-label="從相簿選擇樂譜"
             >
@@ -235,7 +247,7 @@ const B2Upload = () => {
 
             <div className="relative flex items-center justify-center">
               <button
-                onClick={() => navigate('/grading/process')}
+                onClick={startProcessing}
                 className="relative h-16 w-16 rounded-full border-4 border-cyan-200 bg-white shadow-[0_12px_30px_rgba(34,211,238,0.24)]"
                 aria-label="模擬拍攝樂譜"
               />
@@ -271,7 +283,7 @@ const B2Upload = () => {
                 key={page}
                 onClick={() => {
                   setShowPdfPages(false);
-                  navigate('/grading/process');
+                  startProcessing();
                 }}
                 className="aspect-[3/4] rounded-xl bg-card border border-border shadow-card flex flex-col items-center justify-center gap-2 text-foreground"
               >
