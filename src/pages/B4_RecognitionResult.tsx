@@ -209,13 +209,13 @@ const B4RecognitionResult = () => {
                 );
               })}
             </svg>
+          </div>
 
-            <div
-              data-testid="selected-issue-overlay"
-              className="absolute inset-x-3 bottom-3 hidden rounded-2xl border border-white/45 bg-background/82 px-4 py-3 backdrop-blur-md sm:block"
-            >
-              <SelectedIssueBadge issue={selectedIssue} />
-            </div>
+          <div
+            data-testid="selected-issue-overlay"
+            className="mt-3 hidden rounded-2xl border border-border/70 bg-background px-4 py-3 sm:block"
+          >
+            <SelectedIssueBadge issue={selectedIssue} />
           </div>
         </section>
 

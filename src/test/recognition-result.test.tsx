@@ -54,4 +54,27 @@ describe("B4RecognitionResult", () => {
     expect(mobileCard).toHaveTextContent("平行五度");
     expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 2 拍至第 3 拍");
   });
+
+  it("never nests the desktop summary overlay inside the score aspect frame", () => {
+    // Regression guard: previously the overlay sat absolute inside the
+    // aspect-[2048/840] wrapper of the score SVG, which at ≥sm viewports
+    // stacked it over the bass clef and hid Soprano/Bass voice-leading
+    // errors from the reader (see problem.png in the original report).
+    // Keep the overlay strictly OUTSIDE the SVG's aspect frame so both
+    // staves remain fully visible on every supported viewport.
+    const { container } = render(
+      <MemoryRouter>
+        <B4RecognitionResult />
+      </MemoryRouter>
+    );
+
+    const overlay = screen.getByTestId("selected-issue-overlay");
+    const scoreSvg = container.querySelector(
+      "svg[aria-labelledby='recognition-score-title']"
+    );
+    expect(scoreSvg).not.toBeNull();
+    const scoreFrame = scoreSvg!.parentElement;
+    expect(scoreFrame).not.toBeNull();
+    expect(scoreFrame).not.toContainElement(overlay);
+  });
 });
