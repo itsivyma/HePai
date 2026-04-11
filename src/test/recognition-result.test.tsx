@@ -54,4 +54,25 @@ describe("B4RecognitionResult", () => {
     expect(mobileCard).toHaveTextContent("平行五度");
     expect(screen.getByTestId("selected-issue-panel")).toHaveTextContent("第二小節，第 2 拍至第 3 拍");
   });
+
+  it("preserves the native aspect ratio of the score capture image", () => {
+    // Robustness guard: if someone swaps /public/score-original.png for a
+    // differently-proportioned photograph, `preserveAspectRatio="none"`
+    // would silently stretch the notation vertically or horizontally. The
+    // current image (2560×1051) happens to match the 2048×840 viewBox
+    // closely enough to hide the bug, but future edits shouldn't depend
+    // on that coincidence. Use `xMidYMid meet` so any future aspect
+    // mismatch letterboxes rather than distorts the music.
+    const { container } = render(
+      <MemoryRouter>
+        <B4RecognitionResult />
+      </MemoryRouter>
+    );
+
+    const scoreImage = container.querySelector(
+      "svg[aria-labelledby='recognition-score-title'] image"
+    );
+    expect(scoreImage).not.toBeNull();
+    expect(scoreImage).toHaveAttribute("preserveAspectRatio", "xMidYMid meet");
+  });
 });

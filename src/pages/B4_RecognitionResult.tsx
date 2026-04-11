@@ -129,7 +129,7 @@ const B4RecognitionResult = () => {
               aria-labelledby="recognition-score-title"
             >
               <title id="recognition-score-title">已辨識的四部和聲樂譜與錯誤框選</title>
-              <image href={DEMO_CAPTURE_IMAGE} x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} preserveAspectRatio="none" />
+              <image href={DEMO_CAPTURE_IMAGE} x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} preserveAspectRatio="xMidYMid meet" />
               <rect x="0" y="0" width={SCORE_WIDTH} height={SCORE_HEIGHT} fill="url(#scoreShade)" />
               <defs>
                 <linearGradient id="scoreShade" x1="0" y1="0" x2="0" y2="1">
