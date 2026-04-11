@@ -1,0 +1,25 @@
+/**
+ * Cloudflare Workers configuration for the `hepai` deployment.
+ *
+ * HePai ships as a Vite React SPA. We run it as an assets-only Worker
+ * (no Worker script `main`) via Cloudflare's Static Assets binding.
+ * `not_found_handling: "single-page-application"` rewrites every
+ * non-asset URL to `/index.html` so the React Router client can handle
+ * deep links — same behaviour as `vercel.json`'s `rewrites`.
+ *
+ * This file exists so `wrangler deploy` (run by Cloudflare Workers
+ * Builds on every push to `main`) actually has something to deploy.
+ * Before it was added, the build failed in 0s because Wrangler had no
+ * configuration to read.
+ *
+ * Docs: https://developers.cloudflare.com/workers/static-assets/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hepai",
+  "compatibility_date": "2025-04-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
