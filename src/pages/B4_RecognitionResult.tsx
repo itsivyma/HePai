@@ -212,14 +212,14 @@ const B4RecognitionResult = () => {
           </div>
 
           <div
-            data-testid="selected-issue-overlay"
+            data-testid="selected-issue-badge-desktop"
             className="mt-3 hidden rounded-2xl border border-border/70 bg-background px-4 py-3 sm:block"
           >
             <SelectedIssueBadge issue={selectedIssue} />
           </div>
         </section>
 
-        <section data-testid="selected-issue-mobile-card" className="rounded-[2rem] border border-border bg-card p-4 shadow-card sm:hidden">
+        <section data-testid="selected-issue-badge-mobile" className="rounded-[2rem] border border-border bg-card p-4 shadow-card sm:hidden">
           <SelectedIssueBadge issue={selectedIssue} />
         </section>
 
